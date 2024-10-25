@@ -1,10 +1,10 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
+import { fetchAllActiveEvents } from '@/api/supabase/queries/events';
+import EventListingCard from '@/components/EventListingCard/EventListingCard';
 import { H6, SMALL } from '@/styles/text';
-import { fetchAllActiveEvents } from '../../api/supabase/queries/events';
-import EventListingCard from '../../components/EventListingCard/EventListingCard';
-import { Event } from '../../types/schema';
+import { Event } from '@/types/schema';
 import {
   Container,
   Discover,
