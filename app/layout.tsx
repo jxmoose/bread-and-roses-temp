@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import StyledComponentsRegistry from '@/lib/registry';
 import COLORS from '@/styles/colors';
 import { Sans } from '../styles/fonts';
+import COLORS from '@/styles/colors';
 import '../styles/global.css';
 import { AuthContextProvider } from '@/utils/AuthProvider';
 import { OnboardingProvider } from '@/utils/onboardingContext';
