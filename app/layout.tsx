@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 import StyledComponentsRegistry from '@/lib/registry';
-import { Sans } from '../styles/fonts';
 import COLORS from '@/styles/colors';
+import { Sans } from '../styles/fonts';
 import '../styles/global.css';
 import { OnboardingProvider } from '../utils/onboardingContext';
 
@@ -18,10 +18,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body
-        className={Sans.className}
-        style={{ background: COLORS.gray1 }}
-      >
+      <body className={Sans.className} style={{ background: COLORS.gray1 }}>
         <StyledComponentsRegistry>
           <OnboardingProvider>{children}</OnboardingProvider>
         </StyledComponentsRegistry>
