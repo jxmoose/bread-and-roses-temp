@@ -5,7 +5,7 @@ import styled from 'styled-components';
 import COLORS from '@/styles/colors';
 import { H3, H6 } from '@/styles/text';
 
-export const Image = styled(NextImage)`
+export const MenuImage = styled(NextImage)`
   width: 1.5rem;
   height: 1.5rem;
   margin: 1rem;
