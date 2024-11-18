@@ -14,6 +14,7 @@ import {
   InlineContainer,
   Input,
   Rectangle,
+  StyledLink,
   Title,
 } from '../styles';
 
@@ -78,11 +79,13 @@ export default function Onboarding() {
             onChange={handleChange}
           />
         </Container>
-        <ButtonContainer>
-          <ContinueButton>
-            <ContinueText>Continue</ContinueText>
-          </ContinueButton>
-        </ButtonContainer>
+        <StyledLink href="/onboarding/review">
+          <ButtonContainer>
+            <ContinueButton>
+              <ContinueText>Continue</ContinueText>
+            </ContinueButton>
+          </ButtonContainer>
+        </StyledLink>
       </InlineContainer>
     </Background>
   );

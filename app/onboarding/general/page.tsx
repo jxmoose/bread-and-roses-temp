@@ -2,6 +2,7 @@
 'use client';
 
 import { useContext } from 'react';
+import { useRouter } from 'next/navigation';
 import Back from '@/public/images/back.svg';
 import { OnboardingContext } from '@/utils/onboardingContext';
 import {
@@ -14,14 +15,13 @@ import {
   InlineContainer,
   Input,
   Rectangle,
-  StyledLink,
   Title,
 } from '../styles';
 import { Checkbox, RedAsterisk, UpdateContainer, UpdateText } from './styles';
 
 export default function Onboarding() {
+  const router = useRouter();
   const onboardingContext = useContext(OnboardingContext);
-
   if (!onboardingContext) return null;
 
   const { generalInfo, setGeneralInfo } = onboardingContext;
@@ -32,6 +32,17 @@ export default function Onboarding() {
       ...generalInfo,
       [name]: type === 'checkbox' ? checked : value,
     });
+  };
+
+  const handleSubmit = async () => {
+    if (
+      !generalInfo.firstName ||
+      !generalInfo.lastName ||
+      !generalInfo.phoneNumber
+    ) {
+      return;
+    }
+    router.push('/onboarding/preferences');
   };
 
   return (
@@ -45,8 +56,7 @@ export default function Onboarding() {
         <Container>
           <Title>Tell us a bit about yourself!</Title>
           <text>
-            {' '}
-            First Name <RedAsterisk>*</RedAsterisk>{' '}
+            First Name <RedAsterisk>*</RedAsterisk>
           </text>
           <Input
             name="firstName"
@@ -54,8 +64,7 @@ export default function Onboarding() {
             onChange={handleChange}
           />
           <text>
-            {' '}
-            Last Name <RedAsterisk>*</RedAsterisk>{' '}
+            Last Name <RedAsterisk>*</RedAsterisk>
           </text>
           <Input
             name="lastName"
@@ -63,8 +72,7 @@ export default function Onboarding() {
             onChange={handleChange}
           />
           <text>
-            {' '}
-            Phone Number <RedAsterisk>*</RedAsterisk>{' '}
+            Phone Number <RedAsterisk>*</RedAsterisk>
           </text>
           <Input
             name="phoneNumber"
@@ -79,19 +87,17 @@ export default function Onboarding() {
               onChange={handleChange}
             />
             <UpdateText>
-              I want to get updated when there's an event that matches my
+              I want to get updated when there&apos;s an event that matches my
               interest!
             </UpdateText>
           </UpdateContainer>
         </Container>
 
-        <StyledLink href="/onboarding/preferences">
-          <ButtonContainer>
-            <ContinueButton>
-              <ContinueText>Continue</ContinueText>
-            </ContinueButton>
-          </ButtonContainer>
-        </StyledLink>
+        <ButtonContainer>
+          <ContinueButton onClick={handleSubmit}>
+            <ContinueText>Continue</ContinueText>
+          </ContinueButton>
+        </ButtonContainer>
       </InlineContainer>
     </Background>
   );
