@@ -2,8 +2,7 @@
 
 import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
-import { fetchAcceptedEventsByVolunteer } from '@/api/supabase/queries/events';
-import { fetchFacilityById } from '@/api/supabase/queries/facilities';
+import { cachedEvents, cachedFacility } from '@/app/events/eventscache';
 import MenuBar from '@/components/MenuBar/MenuBar';
 import MyEventCard from '@/components/MyEventCard/MyEventCard';
 import { Event, Facilities } from '@/types/schema';
@@ -14,23 +13,23 @@ type GroupedEvents = {
 };
 
 export default function EventPage() {
-  const [data, setData] = useState<Event[]>([]);
+  const [events, setEvents] = useState<Event[]>([]);
   const [facilities, setFacilities] = useState<{ [id: string]: Facilities }>(
     {},
   );
 
   useEffect(() => {
     // Fetch events
-    fetchAcceptedEventsByVolunteer('11d219d9-bf05-4a06-a23e-89fd566c7a04').then(
+    cachedEvents('11d219d9-bf05-4a06-a23e-89fd566c7a04').then(
       async eventsData => {
         const events = eventsData ?? [];
-        setData(events);
+        setEvents(events);
 
         // Fetch facility data for each event
         const facilityIds = [
           ...new Set(events.map(event => event.facility_id)),
         ];
-        const facilityPromises = facilityIds.map(id => fetchFacilityById(id));
+        const facilityPromises = facilityIds.map(id => cachedFacility(id));
         const facilitiesData = await Promise.all(facilityPromises);
 
         // Map facilities by their ID for easier access
@@ -63,7 +62,7 @@ export default function EventPage() {
     }, {} as GroupedEvents);
   };
 
-  const eventsByMonth = groupEventsByMonth(data);
+  const eventsByMonth = groupEventsByMonth(events);
 
   // Sort the events by month
   const sortedEntries = Object.entries(eventsByMonth).sort((a, b) => {

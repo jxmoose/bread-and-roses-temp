@@ -4,14 +4,12 @@ import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { UUID } from 'crypto';
 import {
-  fetchEventById,
-  fetchEventHostByID,
-} from '@/api/supabase/queries/events';
-import {
-  fetchFacilityById,
-  fetchFacilityContactByID,
-} from '@/api/supabase/queries/facilities';
-import { fetchPerformer } from '@/api/supabase/queries/volunteers';
+  cachedEvent,
+  cachedFacility,
+  cachedFacilityContact,
+  cachedHost,
+  cachedPerformer,
+} from '@/app/events/eventscache';
 import LocPin from '@/public/images/black_loc_pin.svg';
 import BPLogo from '@/public/images/bp-logo.png';
 import Calendar from '@/public/images/calendar_icon.svg';
@@ -44,18 +42,18 @@ export default function EventDisplay({
 
   useEffect(() => {
     const getEvent = async () => {
-      const fetchedEvent: Event = await fetchEventById(params.event_id);
+      const fetchedEvent: Event = await cachedEvent(params.event_id);
       setEvent(fetchedEvent);
-      const fetchedFacility: Facilities = await fetchFacilityById(
+      const fetchedFacility: Facilities = await cachedFacility(
         fetchedEvent.facility_id,
       );
       setFacility(fetchedFacility);
       const fetchedFacilityContact: FacilityContacts =
-        await fetchFacilityContactByID(fetchedEvent.facility_id);
+        await cachedFacilityContact(fetchedEvent.facility_id);
       setFacilityContact(fetchedFacilityContact);
 
       if (fetchedEvent.needs_host) {
-        const host: Volunteers = await fetchEventHostByID(params.event_id);
+        const host: Volunteers = await cachedHost(params.event_id);
         setHostName(`${host.first_name} ${host.last_name}`);
         setHostPhoneNumber(host.phone_number);
       } else {
@@ -63,7 +61,7 @@ export default function EventDisplay({
         setHostPhoneNumber(fetchedFacility.host_contact);
       }
 
-      const fetchedPerformer: Volunteers = await fetchPerformer(
+      const fetchedPerformer: Volunteers = await cachedPerformer(
         params.event_id,
       );
       setPerformer(fetchedPerformer);
