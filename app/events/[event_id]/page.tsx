@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useMemo, useState } from 'react';
 import Link from 'next/link';
 import { UUID } from 'crypto';
 import {
@@ -40,38 +40,37 @@ export default function EventDisplay({
   const [host_phone_number, setHostPhoneNumber] = useState<string>();
   const [performer, setPerformer] = useState<Volunteers>();
 
-  useEffect(() => {
-    const getEvent = async () => {
-      const fetchedEvent: Event = await cachedEvent(params.event_id);
-      setEvent(fetchedEvent);
-      const fetchedFacility: Facilities = await cachedFacility(
-        fetchedEvent.facility_id,
-      );
-      setFacility(fetchedFacility);
-      const fetchedFacilityContact: FacilityContacts =
-        await cachedFacilityContact(fetchedEvent.facility_id);
-      setFacilityContact(fetchedFacilityContact);
-
-      if (fetchedEvent.needs_host) {
-        const host: Volunteers = await cachedHost(params.event_id);
-        setHostName(`${host.first_name} ${host.last_name}`);
-        setHostPhoneNumber(host.phone_number);
+  useMemo(() => {
+    cachedEvent(params.event_id).then(eventData => {
+      setEvent(eventData);
+    });
+    cachedPerformer(params.event_id).then(performerData => {
+      setPerformer(performerData);
+    });
+    if (event) {
+      cachedFacility(event.facility_id).then(facilityData => {
+        setFacility(facilityData);
+      });
+      cachedFacilityContact(event.facility_id).then(facilityContact => {
+        setFacilityContact(facilityContact);
+      });
+    }
+    if (event && facility) {
+      if (event.needs_host) {
+        cachedHost(params.event_id).then(host => {
+          setHostName(`${host.first_name} ${host.last_name}`);
+          setHostPhoneNumber(host.phone_number);
+        });
       } else {
-        setHostName(fetchedFacility.host_name);
-        setHostPhoneNumber(fetchedFacility.host_contact);
+        setHostName(facility.host_name);
+        setHostPhoneNumber(facility.host_contact);
       }
-
-      const fetchedPerformer: Volunteers = await cachedPerformer(
-        params.event_id,
-      );
-      setPerformer(fetchedPerformer);
-    };
-    getEvent();
-  }, [params.event_id]);
+    }
+  }, [params.event_id, event, facility]);
 
   // Render once the event is fetched
   if (!event || !facility || !facility_contact || !performer) {
-    return <p></p>;
+    return <p>Loading...</p>;
   }
 
   const time = formatTime(

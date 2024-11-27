@@ -1,4 +1,5 @@
-import React from 'react';
+import React, { useMemo, useState } from 'react';
+import { cachedFacility } from '@/app/events/eventscache';
 import BPLogo from '@/public/images/bp-logo.png';
 import LocPin from '@/public/images/gray_loc_pin.svg';
 import COLORS from '@/styles/colors';
@@ -6,15 +7,15 @@ import { Event, Facilities } from '@/types/schema';
 import formatTime from '@/utils/formatTime';
 import * as styles from './styles';
 
-interface MyEventCardProps {
-  eventData: Event;
-  facilityData?: Facilities;
-}
+export default function MyEventCard(eventData: Event) {
+  const [facility, setFacility] = useState<Facilities>();
 
-export default function MyEventCard({
-  eventData,
-  facilityData,
-}: MyEventCardProps) {
+  useMemo(() => {
+    cachedFacility(eventData.facility_id).then(facilityData => {
+      setFacility(facilityData);
+    });
+  }, [eventData.facility_id]);
+
   const formattedTime = formatTime(
     new Date(eventData.start_date_time),
     new Date(eventData.end_date_time),
@@ -42,8 +43,8 @@ export default function MyEventCard({
             $align="left"
           >
             <styles.LPImage src={LocPin} alt="Location Pin" />
-            {facilityData
-              ? `${facilityData.street_address_1}, ${facilityData.city}`
+            {facility
+              ? `${facility.street_address_1}, ${facility.city}`
               : 'Fetching location...'}
           </styles.LocationText>
         </div>

@@ -1,11 +1,11 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import Link from 'next/link';
-import { cachedEvents, cachedFacility } from '@/app/events/eventscache';
+import { cachedEvents } from '@/app/events/eventscache';
 import MenuBar from '@/components/MenuBar/MenuBar';
 import MyEventCard from '@/components/MyEventCard/MyEventCard';
-import { Event, Facilities } from '@/types/schema';
+import { Event } from '@/types/schema';
 import * as styles from './styles';
 
 type GroupedEvents = {
@@ -14,34 +14,12 @@ type GroupedEvents = {
 
 export default function EventPage() {
   const [events, setEvents] = useState<Event[]>([]);
-  const [facilities, setFacilities] = useState<{ [id: string]: Facilities }>(
-    {},
-  );
 
-  useEffect(() => {
-    // Fetch events
+  useMemo(() => {
     cachedEvents('11d219d9-bf05-4a06-a23e-89fd566c7a04').then(
-      async eventsData => {
-        const events = eventsData ?? [];
-        setEvents(events);
-
-        // Fetch facility data for each event
-        const facilityIds = [
-          ...new Set(events.map(event => event.facility_id)),
-        ];
-        const facilityPromises = facilityIds.map(id => cachedFacility(id));
-        const facilitiesData = await Promise.all(facilityPromises);
-
-        // Map facilities by their ID for easier access
-        const facilitiesMap = facilityIds.reduce(
-          (acc, id, index) => {
-            acc[id] = facilitiesData[index];
-            return acc;
-          },
-          {} as { [id: string]: Facilities },
-        );
-
-        setFacilities(facilitiesMap);
+      //placeholder user id
+      eventsData => {
+        setEvents(eventsData ?? []);
       },
     );
   }, []);
@@ -100,11 +78,7 @@ export default function EventPage() {
                   href={`/events/${event.event_id}`}
                   style={{ textDecoration: 'none' }}
                 >
-                  <MyEventCard
-                    key={event.event_id}
-                    eventData={event}
-                    facilityData={facilities[event.facility_id]}
-                  />
+                  <MyEventCard key={event.event_id} {...event} />
                 </Link>
               ))}
             </div>
