@@ -1,5 +1,4 @@
-import React, { useEffect, useState } from 'react';
-import { fetchFacilityById } from '@/api/supabase/queries/facilities';
+import React from 'react';
 import BPLogo from '@/public/images/bp-logo.png';
 import LocPin from '@/public/images/gray_loc_pin.svg';
 import COLORS from '@/styles/colors';
@@ -7,15 +6,15 @@ import { Event, Facilities } from '@/types/schema';
 import formatTime from '@/utils/formatTime';
 import * as styles from './styles';
 
-export default function MyEventCard(eventData: Event) {
-  const [facility, setFacility] = useState<Facilities>();
+interface MyEventCardProps {
+  eventData: Event;
+  facilityData?: Facilities;
+}
 
-  useEffect(() => {
-    fetchFacilityById(eventData.facility_id).then(facilityData => {
-      setFacility(facilityData);
-    });
-  }, [eventData.facility_id]);
-
+export default function MyEventCard({
+  eventData,
+  facilityData,
+}: MyEventCardProps) {
   const formattedTime = formatTime(
     new Date(eventData.start_date_time),
     new Date(eventData.end_date_time),
@@ -43,8 +42,8 @@ export default function MyEventCard(eventData: Event) {
             $align="left"
           >
             <styles.LPImage src={LocPin} alt="Location Pin" />
-            {facility
-              ? `${facility.street_address_1}, ${facility.city}`
+            {facilityData
+              ? `${facilityData.street_address_1}, ${facilityData.city}`
               : 'Fetching location...'}
           </styles.LocationText>
         </div>
