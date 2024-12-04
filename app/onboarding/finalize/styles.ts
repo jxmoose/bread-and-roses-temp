@@ -2,7 +2,7 @@
 
 import NextImage from 'next/image';
 import styled from 'styled-components';
-import COLORS from '../../../styles/colors';
+import COLORS from '@/styles/colors';
 
 export const Title = styled.h1`
   font-size: 24px;
@@ -64,7 +64,7 @@ export const ContinueButton = styled.button`
   justify-content: center;
   align-items: center;
   align-self: stretch;
-  border-radius: 99999px;
+  border-radius: 8px;
   background: ${COLORS.pomegranate};
   border-style: solid;
   border-color: ${COLORS.gray12};
