@@ -5,37 +5,20 @@ export async function handleSignUp(
   password: string,
 ): Promise<{ success: boolean; message: string }> {
   try {
-    const { data, error } = await supabase.auth.signUp({ email, password });
+    await ensureLoggedOutForNewUser(email);
+    const { error } = await supabase.auth.signUp({
+      email,
+      password,
+      options: {
+        emailRedirectTo: 'http://localhost:3000/verification',
+      },
+    });
 
     if (error) {
       return { success: false, message: `Sign-up failed: ${error.message}` };
     }
 
-    const user = data.user;
-    if (!user) {
-      return {
-        success: false,
-        message: 'Sign-up failed: User was not created.',
-      };
-    }
-
-    const { error: insertError } = await supabase.from('volunteers').insert([
-      {
-        user_id: user.id,
-        email,
-        first_name: '',
-        last_name: '',
-        phone_number: '',
-        notifications_opt_in: true, // default value
-      },
-    ]);
-
-    if (insertError) {
-      return {
-        success: false,
-        message: `Error storing user data: ${insertError.message}`,
-      };
-    }
+    localStorage.setItem('tempEmail', email);
 
     return { success: true, message: 'Sign-up successful!' };
   } catch (err) {
@@ -49,11 +32,44 @@ export async function handleSignUp(
   }
 }
 
+export const insertVolunteer = async (user: { id: string; email: string }) => {
+  if (!user) {
+    return {
+      success: false,
+      message: 'User data is missing. Cannot insert into volunteers table.',
+    };
+  }
+
+  const { error: insertError } = await supabase.from('volunteers').insert([
+    {
+      user_id: user.id,
+      email: user.email,
+      first_name: '',
+      last_name: '',
+      phone_number: '',
+      notifications_opt_in: true,
+    },
+  ]);
+
+  if (insertError) {
+    return {
+      success: false,
+      message: `Error storing user data: ${insertError.message}`,
+    };
+  }
+
+  return {
+    success: true,
+    message: 'User successfully added to volunteers table.',
+  };
+};
+
 export async function handleSignIn(
   email: string,
   password: string,
 ): Promise<{ success: boolean; message: string }> {
   try {
+    await ensureLoggedOutForNewUser(email);
     const { error: signInError } = await supabase.auth.signInWithPassword({
       email,
       password,
@@ -96,6 +112,37 @@ export async function handleSignIn(
   }
 }
 
+export const handleSignOut = async () => {
+  const { error } = await supabase.auth.signOut();
+  if (error) {
+    console.error('Error during logout:', error.message);
+    return;
+  }
+};
+
+export async function ensureLoggedOutForNewUser(
+  newEmail: string,
+): Promise<void> {
+  const { data, error } = await supabase.auth.getSession();
+
+  if (error) {
+    console.error('Error fetching session:', error.message);
+    throw new Error('Failed to fetch session.');
+  }
+
+  const session = data.session;
+
+  if (
+    session &&
+    session.user &&
+    session.user.email &&
+    session.user.email !== newEmail
+  ) {
+    console.log(`Logging out current user: ${session.user.email}`);
+    await handleSignOut();
+  }
+}
+
 export async function checkUserExists(
   userId: string,
   userType: 'volunteer' | 'facility',
@@ -117,4 +164,25 @@ export async function checkUserExists(
     console.error('Error checking user existence:', err);
     return false;
   }
+}
+
+export async function resendVerificationEmail(email: string): Promise<string> {
+  try {
+    const { error } = await supabase.auth.resend({
+      type: 'signup',
+      email: email,
+    });
+
+    if (error) {
+      return `Error: ${error.message}`;
+    }
+
+    return 'Verification email resent successfully!';
+  } catch (err) {
+    return 'Unexpected error while resending verification email.';
+  }
+}
+
+export function getTempEmail(): string | null {
+  return localStorage.getItem('tempEmail');
 }
