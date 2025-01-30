@@ -36,7 +36,17 @@ const facilityTypeOptions = new Set([
   'Visually Impaired',
 ]);
 
-const locationOptions = new Set(['No types yet']);
+const locationOptions = new Set([
+  'Alameda',
+  'Contra Coast',
+  'Marin',
+  'Napa',
+  'San Fransisco',
+  'San Mateo',
+  'Santa Clara',
+  'Solano',
+  'Sonoma',
+]);
 
 const audienceOptions = new Set(['Youth', 'Adults', 'Senior ']);
 
