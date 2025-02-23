@@ -2,7 +2,11 @@
 
 import React, { useState } from 'react';
 import MenuBar from '@/components/MenuBar/MenuBar';
-import SettingsCard from '@/components/SettingsCard/SettingsCard';
+import SettingsCardPersonalDetails from '@/components/SettingsCard/SettingsCardPersonalDetails';
+import SettingsCardNotifications from '@/components/SettingsCard/SettingsCardNotifications';
+import SettingsCardAccomodations from '@/components/SettingsCard/SettingsCardAccomodations';
+import SettingsCardShowPreferences from '@/components/SettingsCard/SettingsCardShowPreferences';
+import SettingsCardPerformanceInterest from '@/components/SettingsCard/SettingsCardPerformanceInterest';
 import * as styles from './styles';
 
 export default function SettingsPage() {
@@ -13,9 +17,11 @@ export default function SettingsPage() {
       <MenuBar setMenuExpanded={setMenuExpanded} />
       <styles.Page $menuExpanded={menuExpanded}>
         <styles.SettingDiv>
-          <SettingsCard />
-          <SettingsCard />
-          <SettingsCard />
+          <SettingsCardPersonalDetails />
+          <SettingsCardNotifications />
+          <SettingsCardShowPreferences />
+          <SettingsCardPerformanceInterest />
+          <SettingsCardAccomodations />
         </styles.SettingDiv>
       </styles.Page>
     </styles.All>

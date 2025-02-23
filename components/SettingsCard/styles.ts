@@ -44,9 +44,13 @@ export const Content = styled.main`
 export const SubHeader = styled.main`
   display: flex;
   flex-direction: column;
-  gap: 4px;
+  gap: 24px;
   justify-content: start;
   margin-bottom: 0.25rem;
+`;
+
+export const SettingDetail = styled.main`
+  gap: 4px;
 `;
 
 export const Edit = styled(NextImage)`
@@ -56,7 +60,6 @@ export const Edit = styled(NextImage)`
 
 export const TruncatedText = styled(SMALL)`
   display: -webkit-box;
-  -webkit-line-clamp: 2; /* Limit to 2 lines */
   -webkit-box-orient: vertical;
   overflow: hidden;
   text-overflow: ellipsis;
