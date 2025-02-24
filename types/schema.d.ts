@@ -88,6 +88,7 @@ export interface Event {
   end_date_time: string; //timestamptz
   performance_type: PerformanceType;
   genre?: Genre;
+  name: string;
   needs_host: boolean;
   event_status: EventStatus;
   performer_type: PerformerType;
