@@ -27,7 +27,11 @@ export default function SettingCardAccomodations() {
                 $color={COLORS.gray11}
                 $align="left"
               >
-                Burnt tomatoes pineapple rib red. Tomato string spinach white steak meat lovers buffalo pie. String onions sausage party spinach ricotta spinach. Marinara stuffed pizza Chicago Philly style tossed. Thin parmesan lasagna lot buffalo lasagna tomatoes onions green.
+                Burnt tomatoes pineapple rib red. Tomato string spinach white
+                steak meat lovers buffalo pie. String onions sausage party
+                spinach ricotta spinach. Marinara stuffed pizza Chicago Philly
+                style tossed. Thin parmesan lasagna lot buffalo lasagna tomatoes
+                onions green.
               </styles.TruncatedText>
             </styles.SettingDetail>
           </styles.SubHeader>

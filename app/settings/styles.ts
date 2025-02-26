@@ -25,6 +25,3 @@ export const SettingDiv = styled.div`
     width: 80%;
   }
 `;
-
-
-

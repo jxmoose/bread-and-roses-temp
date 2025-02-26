@@ -22,7 +22,7 @@ export default function SettingCardShowPreferences() {
               <P $fontWeight="500" $color={COLORS.gray12} $align="left">
                 Facility Type
               </P>
-              <ul style={{ paddingLeft: '20px', listStyleType: 'disc' }}>
+              <ul style={{ paddingLeft: '1.25rem', listStyleType: 'disc' }}>
                 <li>
                   <styles.TruncatedText
                     $fontWeight="400"
@@ -47,7 +47,7 @@ export default function SettingCardShowPreferences() {
               <P $fontWeight="500" $color={COLORS.gray12} $align="left">
                 Location Preferences
               </P>
-              <ul style={{ paddingLeft: '20px', listStyleType: 'disc' }}>
+              <ul style={{ paddingLeft: '1.25rem', listStyleType: 'disc' }}>
                 <li>
                   <styles.TruncatedText
                     $fontWeight="400"
@@ -63,7 +63,7 @@ export default function SettingCardShowPreferences() {
               <P $fontWeight="500" $color={COLORS.gray12} $align="left">
                 Preferred Audience
               </P>
-              <ul style={{ paddingLeft: '20px', listStyleType: 'disc' }}>
+              <ul style={{ paddingLeft: '1.25rem', listStyleType: 'disc' }}>
                 <li>
                   <styles.TruncatedText
                     $fontWeight="400"

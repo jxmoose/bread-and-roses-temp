@@ -31,7 +31,7 @@ export const AvailabilityTitle = styled.main`
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  gap: 4px;
+  gap: 0.25rem;
 `;
 
 export const Content = styled.main`
@@ -44,13 +44,13 @@ export const Content = styled.main`
 export const SubHeader = styled.main`
   display: flex;
   flex-direction: column;
-  gap: 24px;
+  gap: 1.5rem;
   justify-content: start;
   margin-bottom: 0.25rem;
 `;
 
 export const SettingDetail = styled.main`
-  gap: 4px;
+  gap: 0.25rem;
 `;
 
 export const Edit = styled(NextImage)`
