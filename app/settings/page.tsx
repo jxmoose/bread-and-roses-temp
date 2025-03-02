@@ -7,10 +7,8 @@ import SettingsCardNotifications from '@/components/SettingsCard/SettingsCardNot
 import SettingsCardPerformanceInterest from '@/components/SettingsCard/SettingsCardPerformanceInterest';
 import SettingsCardPersonalDetails from '@/components/SettingsCard/SettingsCardPersonalDetails';
 import SettingsCardShowPreferences from '@/components/SettingsCard/SettingsCardShowPreferences';
-import * as styles from './styles';
 import SignOut from '@/public/images/signout.svg';
-import { P } from "@/styles/text";
-
+import * as styles from './styles';
 
 export default function SettingsPage() {
   const [menuExpanded, setMenuExpanded] = useState(false); // Track the expanded state of the menu
@@ -22,7 +20,7 @@ export default function SettingsPage() {
         <styles.SettingDiv>
           <styles.ProfileName> Jane Doe </styles.ProfileName>
           <styles.Email> jane.doe@gmail.com </styles.Email>
-          <styles.SignOutButton> 
+          <styles.SignOutButton>
             <styles.SignOut src={SignOut} alt="SignOut" />
             <styles.ButtonText> Sign Out </styles.ButtonText>
           </styles.SignOutButton>

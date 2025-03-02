@@ -1,7 +1,7 @@
-import styled from 'styled-components';
-import { H3, P } from '@/styles/text';
-import COLORS from '@/styles/colors';
 import NextImage from 'next/image';
+import styled from 'styled-components';
+import COLORS from '@/styles/colors';
+import { H3, P } from '@/styles/text';
 
 export const All = styled.div`
   margin-left:;
@@ -39,7 +39,7 @@ export const Email = styled(P)`
   font-style: normal;
   font-weight: 400;
   margin-top: 0.25rem;
-`
+`;
 
 export const SignOutButton = styled.button`
   border: 1px solid ${COLORS.pomegranate12};
@@ -60,5 +60,5 @@ export const ButtonText = styled(P)`
 
 export const SignOut = styled(NextImage)`
   width: 20px;
-  height: 20px; 
-`
+  height: 20px;
+`;
