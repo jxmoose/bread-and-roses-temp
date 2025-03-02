@@ -8,6 +8,9 @@ import SettingsCardPerformanceInterest from '@/components/SettingsCard/SettingsC
 import SettingsCardPersonalDetails from '@/components/SettingsCard/SettingsCardPersonalDetails';
 import SettingsCardShowPreferences from '@/components/SettingsCard/SettingsCardShowPreferences';
 import * as styles from './styles';
+import SignOut from '@/public/images/signout.svg';
+import { P } from "@/styles/text";
+
 
 export default function SettingsPage() {
   const [menuExpanded, setMenuExpanded] = useState(false); // Track the expanded state of the menu
@@ -17,6 +20,12 @@ export default function SettingsPage() {
       <MenuBar setMenuExpanded={setMenuExpanded} />
       <styles.Page $menuExpanded={menuExpanded}>
         <styles.SettingDiv>
+          <styles.ProfileName> Jane Doe </styles.ProfileName>
+          <styles.Email> jane.doe@gmail.com </styles.Email>
+          <styles.SignOutButton> 
+            <styles.SignOut src={SignOut} alt="SignOut" />
+            <styles.ButtonText> Sign Out </styles.ButtonText>
+          </styles.SignOutButton>
           <SettingsCardPersonalDetails />
           <SettingsCardNotifications />
           <SettingsCardShowPreferences />

@@ -3,7 +3,7 @@
 import NextImage from 'next/image';
 import styled from 'styled-components';
 import COLORS from '@/styles/colors';
-import { SMALL } from '@/styles/text';
+import { SMALL, H3} from '@/styles/text';
 
 export const AvailabilityContainer = styled.main`
   display: flex;
@@ -65,3 +65,5 @@ export const TruncatedText = styled(SMALL)`
   text-overflow: ellipsis;
   white-space: normal;
 `;
+
+
