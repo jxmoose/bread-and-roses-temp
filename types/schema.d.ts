@@ -134,6 +134,7 @@ export interface Facilities {
   audience: Audience;
   type: FacilityType;
   host_name?: string;
+  host_email?: string;
   host_phone_number?: string;
   user_id: UUID;
   is_approved: boolean;
