@@ -9,7 +9,6 @@ import SettingsCardPerformanceInterest from '@/components/SettingsCard/SettingsC
 import SettingsCardPersonalDetails from '@/components/SettingsCard/SettingsCardPersonalDetails';
 import SettingsCardShowPreferences from '@/components/SettingsCard/SettingsCardShowPreferences';
 import SignOut from '@/public/images/signout.svg';
-import { Volunteers } from '@/types/schema';
 import { useSession } from '@/utils/AuthProvider';
 import * as styles from './styles';
 
@@ -38,13 +37,20 @@ export default function SettingsPage() {
       <MenuBar setMenuExpanded={setMenuExpanded} />
       <styles.Page $menuExpanded={menuExpanded}>
         <styles.SettingDiv>
-          <styles.ProfileName> {userInfo.first_name} </styles.ProfileName>
+          <styles.ProfileName>
+            {' '}
+            {userInfo.first_name} {userInfo.last_name}{' '}
+          </styles.ProfileName>
           <styles.Email> {session.user.email} </styles.Email>
           <styles.SignOutButton>
             <styles.SignOut src={SignOut} alt="SignOut" />
             <styles.ButtonText> Sign Out </styles.ButtonText>
           </styles.SignOutButton>
-          <SettingsCardPersonalDetails />
+          <SettingsCardPersonalDetails
+            first_name={userInfo.first_name}
+            last_name={userInfo.last_name}
+            phone={userInfo.phone_number}
+          />
           <SettingsCardNotifications />
           <SettingsCardShowPreferences />
           <SettingsCardPerformanceInterest />

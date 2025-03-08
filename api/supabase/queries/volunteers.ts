@@ -4,7 +4,7 @@ import supabase from '../createClient';
 export async function fetchVolunteerPreferences(user_id: UUID) {
   const { data, error } = await supabase
     .from('volunteers')
-    .select('first_name', 'last_name', 'phone_number')
+    .select('first_name, last_name, phone_number')
     .eq('user_id', user_id)
     .single();
 
