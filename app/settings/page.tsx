@@ -1,6 +1,7 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import { fetchVolunteerPreferences } from '@/api/supabase/queries/volunteers';
 import MenuBar from '@/components/MenuBar/MenuBar';
 import SettingsCardAccomodations from '@/components/SettingsCard/SettingsCardAccomodations';
 import SettingsCardNotifications from '@/components/SettingsCard/SettingsCardNotifications';
@@ -8,18 +9,37 @@ import SettingsCardPerformanceInterest from '@/components/SettingsCard/SettingsC
 import SettingsCardPersonalDetails from '@/components/SettingsCard/SettingsCardPersonalDetails';
 import SettingsCardShowPreferences from '@/components/SettingsCard/SettingsCardShowPreferences';
 import SignOut from '@/public/images/signout.svg';
+import { Volunteers } from '@/types/schema';
+import { useSession } from '@/utils/AuthProvider';
 import * as styles from './styles';
 
 export default function SettingsPage() {
   const [menuExpanded, setMenuExpanded] = useState(false); // Track the expanded state of the menu
+  const { session } = useSession();
+  const [userInfo, setUserInfo] = useState(null);
+
+  //const user_info = fetchVolunteerPreferences(session.user.id);
+
+  useEffect(() => {
+    const getUserInfo = async () => {
+      const fetchedUserInfo = await fetchVolunteerPreferences(session.user.id);
+      setUserInfo(fetchedUserInfo);
+    };
+
+    getUserInfo();
+  }, [session.user.id]);
+
+  if (!userInfo) {
+    return <div>Loading...</div>;
+  }
 
   return (
     <styles.All>
       <MenuBar setMenuExpanded={setMenuExpanded} />
       <styles.Page $menuExpanded={menuExpanded}>
         <styles.SettingDiv>
-          <styles.ProfileName> Jane Doe </styles.ProfileName>
-          <styles.Email> jane.doe@gmail.com </styles.Email>
+          <styles.ProfileName> {userInfo.first_name} </styles.ProfileName>
+          <styles.Email> {session.user.email} </styles.Email>
           <styles.SignOutButton>
             <styles.SignOut src={SignOut} alt="SignOut" />
             <styles.ButtonText> Sign Out </styles.ButtonText>
