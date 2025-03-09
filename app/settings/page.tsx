@@ -1,7 +1,10 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
-import { fetchVolunteerPreferences } from '@/api/supabase/queries/volunteers';
+import {
+  fetchVolunteerInfo,
+  fetchVolunteerPreferences,
+} from '@/api/supabase/queries/volunteers';
 import MenuBar from '@/components/MenuBar/MenuBar';
 import SettingsCardAccomodations from '@/components/SettingsCard/SettingsCardAccomodations';
 import SettingsCardNotifications from '@/components/SettingsCard/SettingsCardNotifications';
@@ -16,19 +19,25 @@ export default function SettingsPage() {
   const [menuExpanded, setMenuExpanded] = useState(false); // Track the expanded state of the menu
   const { session } = useSession();
   const [userInfo, setUserInfo] = useState(null);
+  const [userPreferences, setUserPreferences] = useState(null);
 
   //const user_info = fetchVolunteerPreferences(session.user.id);
 
   useEffect(() => {
-    const getUserInfo = async () => {
-      const fetchedUserInfo = await fetchVolunteerPreferences(session.user.id);
+    const getUserData = async () => {
+      const fetchedUserInfo = await fetchVolunteerInfo(session.user.id);
       setUserInfo(fetchedUserInfo);
+
+      const fetchedUserPreferences = await fetchVolunteerPreferences(
+        session.user.id,
+      );
+      setUserPreferences(fetchedUserPreferences);
     };
 
-    getUserInfo();
+    getUserData();
   }, [session.user.id]);
 
-  if (!userInfo) {
+  if (!userInfo || !userPreferences) {
     return <div>Loading...</div>;
   }
 
@@ -52,9 +61,18 @@ export default function SettingsPage() {
             phone={userInfo.phone_number}
           />
           <SettingsCardNotifications />
-          <SettingsCardShowPreferences />
-          <SettingsCardPerformanceInterest />
-          <SettingsCardAccomodations />
+          <SettingsCardShowPreferences
+            facility_preferences={userPreferences.facility_type}
+            locations={userPreferences.locations}
+            audience_preferences={userPreferences.audience_type}
+          />
+          <SettingsCardPerformanceInterest
+            performance_types={userPreferences.performance_type}
+            genres={userPreferences.genre}
+          />
+          <SettingsCardAccomodations
+            accomodations={userPreferences.additional_info}
+          />
         </styles.SettingDiv>
       </styles.Page>
     </styles.All>

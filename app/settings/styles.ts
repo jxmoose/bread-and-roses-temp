@@ -44,7 +44,7 @@ export const Email = styled(P)`
 export const SignOutButton = styled.button`
   border: 1px solid ${COLORS.pomegranate12};
   padding: 0.5rem 1rem;
-  border-radius: 8px;
+  border-radius: 0.5rem;
   width: 7.4rem;
   height: 2.3rem;
   margin-bottom: 2.625rem;
@@ -59,6 +59,6 @@ export const ButtonText = styled(P)`
 `;
 
 export const SignOut = styled(NextImage)`
-  width: 20px;
-  height: 20px;
+  width: 1.25rem;
+  height: 1.25rem;
 `;
