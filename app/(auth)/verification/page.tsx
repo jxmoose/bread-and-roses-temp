@@ -106,7 +106,6 @@ export default function Verification() {
             A verification link has been sent to the email you specified, please
             check your inbox for next steps.
           </P>
-
           <EmailContainer>
             <EmailIconStyled src={EmailIcon} alt="Email Icon" />
             <EmailText>
@@ -114,7 +113,6 @@ export default function Verification() {
             </EmailText>
           </EmailContainer>
 
-          {/* This button is styled as before without the transient bgColor/textColor props */}
           <RoundedCornerButton onClick={handleUseAnotherAccount} width="70%">
             Use another account
           </RoundedCornerButton>
