@@ -3,9 +3,7 @@
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import {
-  checkUserExists,
   getTempEmail,
-  insertVolunteer,
   resendVerificationEmail,
 } from '@/api/supabase/queries/auth';
 import Bud from '@/public/images/bud.svg';
@@ -43,39 +41,10 @@ export default function Verification() {
   }, []);
 
   useEffect(() => {
-    // Only trigger if a session exists and the email_confirmed_at field is truthy.
-    if (session?.user && session.user.email_confirmed_at) {
-      const email = session.user.email;
-      if (!email) {
-        setIsError(true);
-        setResendStatus('Email is undefined. Please try again.');
-        return;
-      }
-      (async () => {
-        const exists = await checkUserExists(session.user.id, 'volunteer');
-        if (exists) {
-          router.push('/success');
-          return;
-        }
-        try {
-          const result = await insertVolunteer({
-            id: session.user.id,
-            email,
-          });
-          if (result.success) {
-            router.push('/success');
-          } else {
-            setIsError(true);
-            setResendStatus(result.message);
-          }
-        } catch (error) {
-          console.error('Error adding user to volunteers:', error);
-          setIsError(true);
-          setResendStatus('An error occurred while processing your request.');
-        }
-      })();
+    if (session?.user?.email_confirmed_at) {
+      router.push('/success');
     }
-  }, [session?.user?.email_confirmed_at, session, router]);
+  }, [session?.user?.email_confirmed_at, router]);
 
   const handleResendLink = async () => {
     if (tempEmail) {

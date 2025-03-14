@@ -67,13 +67,26 @@ export const insertVolunteer = async (user: { id: string; email: string }) => {
 export async function handleSignIn(
   email: string,
   password: string,
-): Promise<{ success: boolean; message: string }> {
+): Promise<{
+  success: boolean;
+  message: string;
+  redirectTo?: 'verification' | 'roles' | 'discover';
+}> {
   try {
     await ensureLoggedOutForNewUser(email);
+
     const { error: signInError } = await supabase.auth.signInWithPassword({
       email,
       password,
     });
+
+    if (signInError?.message === 'Email not confirmed') {
+      return {
+        success: false,
+        message: 'Please verify your email before logging in.',
+        redirectTo: 'verification',
+      };
+    }
 
     if (signInError) {
       return {
@@ -88,19 +101,37 @@ export async function handleSignIn(
     if (sessionError || !sessionData?.session) {
       return {
         success: false,
-        message: 'Failed to retrieve session information after login.',
+        message: 'Failed to retrieve session after login.',
       };
     }
 
-    const user_id = sessionData.session.user.id;
+    const { data: volunteerData } = await supabase
+      .from('volunteers')
+      .select('user_id')
+      .eq('email', email)
+      .maybeSingle();
 
-    const userExists = await checkUserExists(user_id, 'volunteer');
+    const { data: facilityData } = await supabase
+      .from('facility_contacts')
+      .select('user_id')
+      .eq('email', email)
+      .maybeSingle();
 
-    if (!userExists) {
-      return { success: false, message: 'User not found in volunteers table.' };
+    const onboarded = volunteerData || facilityData;
+
+    if (onboarded) {
+      return {
+        success: true,
+        message: 'Login successful!',
+        redirectTo: 'discover',
+      };
+    } else {
+      return {
+        success: true,
+        message: 'Login successful! Needs onboarding.',
+        redirectTo: 'roles',
+      };
     }
-
-    return { success: true, message: 'Login successful!' };
   } catch (err) {
     if (err instanceof Error) {
       return { success: false, message: `Login failed: ${err.message}` };
@@ -119,6 +150,56 @@ export const handleSignOut = async () => {
     return;
   }
 };
+
+export async function sendPasswordResetEmail(
+  email: string,
+): Promise<{ success: boolean; message: string }> {
+  try {
+    const { error } = await supabase.auth.resetPasswordForEmail(email);
+    if (error) {
+      return {
+        success: false,
+        message: `Password reset failed: ${error.message}`,
+      };
+    }
+    return {
+      success: true,
+      message: 'Password reset email sent successfully.',
+    };
+  } catch (err) {
+    return {
+      success: false,
+      message: 'An unexpected error occurred while sending reset email.',
+    };
+  }
+}
+
+export async function updatePassword(
+  newPassword: string,
+): Promise<{ success: boolean; message: string }> {
+  try {
+    const { error } = await supabase.auth.updateUser({
+      password: newPassword,
+    });
+
+    if (error) {
+      return {
+        success: false,
+        message: `Password update failed: ${error.message}`,
+      };
+    }
+
+    return {
+      success: true,
+      message: 'Password updated successfully! Redirecting...',
+    };
+  } catch (err) {
+    return {
+      success: false,
+      message: 'An unexpected error occurred while updating password.',
+    };
+  }
+}
 
 export async function ensureLoggedOutForNewUser(
   newEmail: string,
