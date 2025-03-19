@@ -14,7 +14,6 @@ export const Background = styled.main<{ isCentered?: boolean }>`
   display: flex;
   align-items: center;
   ${({ isCentered }) => isCentered && 'justify-content: center;'}
-  overflow: hidden;
 `;
 
 export const BackButton = styled.button`
@@ -96,6 +95,7 @@ export const RoleContainer = styled.main`
 
 export const Input = styled.input`
   font-family: ${Sans.style.fontFamily};
+  font-size: 1rem;
   padding: 0.5rem;
   margin-top: 0.1875rem;
   border: 1px solid ${COLORS.gray6};
@@ -107,7 +107,7 @@ export const Input = styled.input`
 export const InputContainer = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 0;
+  gap: 0.25rem;
   width: 100%;
 `;
 
@@ -118,7 +118,7 @@ export const Title = styled(H4)`
 
 export const Label = styled(P)`
   color: ${COLORS.gray11};
-  font-weight: 400;
+  font-weight: 500;
 `;
 
 export const SkipButton = styled.button`

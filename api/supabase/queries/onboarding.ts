@@ -144,10 +144,20 @@ export async function submitFacilityOnboardingData(
   }
 }
 
-export async function fetchCurrentUserFacility(user_id: string) {
+export async function fetchCurrentUserFacility(user_id?: string) {
+  const { data: sessionData, error: sessionError } =
+    await supabase.auth.getSession();
+
+  if (sessionError || !sessionData?.session) {
+    console.error('Session retrieval error:', sessionError);
+    throw new Error('Failed to retrieve user session.');
+  }
+
+  user_id = user_id ? user_id : sessionData.session.user.id;
+
   const { data: facility, error: facility_error } = await supabase
     .from('facilities')
-    .select('is_approved, street_address_1, city, zip')
+    .select('is_approved, street_address_1, city, zip, county')
     .eq('user_id', user_id)
     .single();
 
