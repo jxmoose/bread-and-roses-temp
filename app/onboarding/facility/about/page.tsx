@@ -42,6 +42,8 @@ const facilityTypeOptions = new Set([
   'Visually Impaired',
 ]);
 
+const audienceTypeOptions = new Set(['Youth', 'Adult', 'Senior']);
+
 export default function Onboarding() {
   const router = useRouter();
   const facilityOnboardingContext = useContext(FacilityOnboardingContext);
@@ -87,10 +89,10 @@ export default function Onboarding() {
     facilityOnboardingContext;
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, type, checked, value } = e.target;
+    const { name, value } = e.target;
     setGeneralInfo({
       ...generalInfo,
-      [name]: type === 'checkbox' ? checked : value,
+      [name]: value,
     });
   };
 
@@ -98,6 +100,11 @@ export default function Onboarding() {
     if (selectedOption) {
       setGeneralInfo({ ...generalInfo, facilityType: selectedOption });
     }
+  };
+
+  const handleAudienceChange = (selectedOptions: Set<string>) => {
+    const selectedArray = Array.from(selectedOptions);
+    setGeneralInfo({ ...generalInfo, audience: selectedArray });
   };
 
   //CHANGE CHANGE CHANGE CHANGE
@@ -153,14 +160,55 @@ export default function Onboarding() {
             onChange={handleFacilityChange}
             options={facilityTypeOptions}
             value={generalInfo.facilityType}
+            required={true}
           />
+
+          <InputDropdown
+            label="Audience"
+            placeholder="Type to filter"
+            multi
+            onChange={handleAudienceChange}
+            options={audienceTypeOptions}
+            value={new Set(generalInfo.audience)}
+            required={true}
+          />
+
+          <InputContainer>
+            <Label>
+              Directions to Facility <RedAsterisk>*</RedAsterisk>
+            </Label>
+            <Input
+              name="directions"
+              placeholder="e.g., Take 101 to Durant Ave..."
+              value={generalInfo.directions}
+              onChange={handleChange}
+            />
+          </InputContainer>
+
+          <InputContainer>
+            <Label>
+              Facility Capacity <RedAsterisk>*</RedAsterisk>
+            </Label>
+            <Input
+              name="capacity"
+              placeholder="e.g., 65 participants"
+              value={generalInfo.capacity}
+              onChange={handleChange}
+            />
+          </InputContainer>
         </Container>
 
         <ButtonContainer>
           <Button
-            position="fixed"
+            position="sticky"
             onClick={handleSubmit}
-            disabled={!generalInfo.facilityName || !generalInfo.facilityType}
+            disabled={
+              !generalInfo.facilityName ||
+              !generalInfo.facilityType ||
+              generalInfo.audience.length === 0 ||
+              generalInfo.directions === '' ||
+              generalInfo.capacity === ''
+            }
           >
             <ContinueText>Continue</ContinueText>
           </Button>

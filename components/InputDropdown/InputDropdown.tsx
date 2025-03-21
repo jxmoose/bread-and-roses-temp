@@ -64,6 +64,7 @@ export default function InputDropdown({
   multi,
   value,
 }: InputDropdownProps) {
+  console.log(value);
   const optionsArray = useMemo(
     () =>
       options instanceof Set
@@ -114,7 +115,7 @@ export default function InputDropdown({
         <P $color={COLORS.gray11} $fontWeight={500}>
           {label}
         </P>
-        {required && <SMALL $color={COLORS.rose10}>{'*'}</SMALL>}
+        {required && <SMALL $color={COLORS.rose10}>&nbsp;{'*'}</SMALL>}
       </InputLabel>
       <Select
         components={{ Menu: AnimatedMenu }}
