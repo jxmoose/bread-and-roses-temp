@@ -8,21 +8,28 @@ export const RedAsterisk = styled.span`
   color: #b22222;
 `;
 
-export const GrayInput = styled.div`
+interface GrayInputProps {
+  checked?: boolean;
+}
+
+export const GrayInput = styled.div<GrayInputProps>`
   display: flex;
   font-family: ${Sans.style.fontFamily};
   font-size: 1rem;
   color: ${COLORS.gray10};
   background: ${COLORS.gray1};
   margin-top: 0.1875rem;
-  border: 1px solid ${COLORS.gray6};
-  border-radius: 8px;
+  border-radius: 0.5rem;
   width: 100%;
   box-sizing: border-box;
   padding: 12px 16px 12px 16px;
   align-items: flex-center;
   justify-content: flex-start;
   gap: 12px;
+  border: ${({ checked }) =>
+    checked ? `1px solid ${COLORS.rose10}` : `1px solid ${COLORS.gray6}`};
+  box-shadow: ${({ checked }) =>
+    checked ? '0rem 0rem 0.5rem 0rem rgba(227, 66, 66, 0.25)' : 'none'};
 `;
 
 export const RadioContainer = styled.label`
@@ -30,20 +37,32 @@ export const RadioContainer = styled.label`
   flex-direction: column;
   cursor: pointer;
   width: 100%;
-  gap: 8px;
+  gap: 0.5rem;
 
   input {
     appearance: none;
-    width: 18px;
-    height: 18px;
-    border: 2px solid ${COLORS.gray10};
+    width: 1.25rem;
+    height: 1.25rem;
+    border: 0.125rem solid ${COLORS.gray10};
     border-radius: 50%;
     position: relative;
     cursor: pointer;
   }
 
   input:checked {
-    border: 3px solid ${COLORS.rose10}; /* Custom color for checked */
+    border: 0.125rem solid ${COLORS.rose10}; /* Custom color for checked */
+  }
+
+  input:checked::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0.75rem;
+    height: 0.75rem;
+    background-color: ${COLORS.rose10}; /* Red inner circle */
+    border-radius: 50%;
+    transform: translate(-50%, -50%); /* Center the circle */
   }
 `;
 

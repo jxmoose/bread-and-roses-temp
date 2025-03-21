@@ -12,9 +12,9 @@ import {
   ContinueText,
   Image,
   InlineContainer,
-  Input,
   InputContainer,
   Label,
+  StyledTextarea,
   Title,
 } from '@/app/onboarding/styles';
 import ProgressBar from '@/components/ProgressBar/ProgressBar';
@@ -31,7 +31,9 @@ export default function Onboarding() {
 
   const { facilitySpecificInfo, setSpecificInfo } = facilityOnboardingContext;
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+  ) => {
     const { name, value } = e.target;
 
     setSpecificInfo({
@@ -60,7 +62,7 @@ export default function Onboarding() {
         <Container>
           <InputContainer>
             <Label>Any notes for us at Bread & Roses?</Label>
-            <Input
+            <StyledTextarea
               name="admin_notes"
               placeholder="There are speakers, microphones, etc."
               value={facilitySpecificInfo.admin_notes}

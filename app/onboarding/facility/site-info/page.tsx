@@ -12,9 +12,9 @@ import {
   ContinueText,
   Image,
   InlineContainer,
-  Input,
   InputContainer,
   Label,
+  StyledTextarea,
   Title,
 } from '@/app/onboarding/styles';
 import ProgressBar from '@/components/ProgressBar/ProgressBar';
@@ -39,7 +39,9 @@ export default function Onboarding() {
 
   const { facilitySpecificInfo, setSpecificInfo } = facilityOnboardingContext;
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+  ) => {
     const { name, value } = e.target;
 
     setSpecificInfo({
@@ -77,7 +79,7 @@ export default function Onboarding() {
             </Label>
             <RadioContainer>
               <label>
-                <GrayInput>
+                <GrayInput checked={facilitySpecificInfo.has_piano === true}>
                   <input
                     type="radio"
                     name="has_piano"
@@ -91,7 +93,7 @@ export default function Onboarding() {
                 </GrayInput>
               </label>
               <label>
-                <GrayInput>
+                <GrayInput checked={facilitySpecificInfo.has_piano === false}>
                   <input
                     type="radio"
                     name="has_piano"
@@ -113,7 +115,9 @@ export default function Onboarding() {
             </Label>
             <RadioContainer>
               <label>
-                <GrayInput>
+                <GrayInput
+                  checked={facilitySpecificInfo.has_sound_equipment === true}
+                >
                   <input
                     type="radio"
                     name="has_sound_equipment"
@@ -127,7 +131,9 @@ export default function Onboarding() {
                 </GrayInput>
               </label>
               <label>
-                <GrayInput>
+                <GrayInput
+                  checked={facilitySpecificInfo.has_sound_equipment === false}
+                >
                   <input
                     type="radio"
                     name="has_sound_equipment"
@@ -150,7 +156,9 @@ export default function Onboarding() {
             </Label>
             <RadioContainer>
               <label>
-                <GrayInput>
+                <GrayInput
+                  checked={facilitySpecificInfo.parking === 'Parking Lot'}
+                >
                   <input
                     type="radio"
                     name="parking"
@@ -164,7 +172,7 @@ export default function Onboarding() {
                 </GrayInput>
               </label>
               <label>
-                <GrayInput>
+                <GrayInput checked={facilitySpecificInfo.parking === 'Street'}>
                   <input
                     type="radio"
                     name="parking"
@@ -178,7 +186,7 @@ export default function Onboarding() {
                 </GrayInput>
               </label>
               <label>
-                <GrayInput>
+                <GrayInput checked={facilitySpecificInfo.parking === 'None'}>
                   <input
                     type="radio"
                     name="parking"
@@ -196,7 +204,7 @@ export default function Onboarding() {
 
           <InputContainer>
             <Label>Notes for Volunteers</Label>
-            <Input
+            <StyledTextarea
               name="volunteer_notes"
               placeholder="There are speakers, microphones, etc."
               value={facilitySpecificInfo.volunteer_notes}
