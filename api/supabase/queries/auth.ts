@@ -136,7 +136,6 @@ export async function handleSignIn(
           redirectTo: 'availability/general',
         };
       } else {
-        console.log('facility onboard not complete');
         return {
           success: true,
           message: 'Login successful!',
