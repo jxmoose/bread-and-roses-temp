@@ -99,7 +99,7 @@ export default function AvailabilityPage() {
         router.replace('/availability/general', undefined);
       }, 5000);
     }
-  }, []);
+  }, [router]);
 
   return (
     <div>
