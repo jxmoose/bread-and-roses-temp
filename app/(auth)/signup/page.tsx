@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import { handleSignUp as signUpUser } from '@/api/supabase/queries/auth';
 import BRLogo from '@/public/images/b&r-logo.png';
 import { H5 } from '@/styles/text';
+import { encryptEmail } from '@/utils/emailTokenUtils';
 import {
   Button,
   Card,
@@ -38,13 +39,16 @@ export default function SignUp() {
       return;
     }
 
+    const token = await encryptEmail(email);
     const { success, message } = await signUpUser(email, password);
 
-    setMessage(message);
     setIsError(!success);
+    setMessage(message);
 
     if (success) {
-      router.push('/verification');
+      setTimeout(() => {
+        router.push(`/verification?token=${encodeURIComponent(token)}`);
+      }, 1000);
     }
   };
 
