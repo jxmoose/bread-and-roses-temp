@@ -41,7 +41,7 @@ export default function Verification() {
   }, []);
 
   useEffect(() => {
-    if (!hydrated) return;
+    if (!hydrated || !searchParams) return;
 
     const token = searchParams.get('token');
 

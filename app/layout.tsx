@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import { Suspense } from 'react';
 import StyledComponentsRegistry from '@/lib/registry';
 import COLORS from '@/styles/colors';
 import { Sans } from '../styles/fonts';
@@ -20,7 +21,9 @@ export default function RootLayout({
     <html lang="en">
       <body className={Sans.className} style={{ background: COLORS.gray1 }}>
         <StyledComponentsRegistry>
-          <AuthContextProvider>{children}</AuthContextProvider>
+          <Suspense fallback={<div>Loading...</div>}>
+            <AuthContextProvider>{children}</AuthContextProvider>
+          </Suspense>
         </StyledComponentsRegistry>
       </body>
     </html>
