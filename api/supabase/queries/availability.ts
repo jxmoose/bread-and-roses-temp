@@ -2,26 +2,55 @@ import type { UUID } from 'crypto';
 import supabase from '../createClient';
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-export async function fetchAvailabilitiesByFacilityId(facility_id: UUID) {
+export async function fetchFacilityIdByUserId(user_id: string) {
+  const { data, error } = await supabase
+    .from('facility_contacts')
+    .select('facility_id')
+    .eq('user_id', user_id)
+    .single();
+
+  if (error) {
+    console.error('Error fetching facility_id:', error);
+    return null;
+  }
+
+  return data?.facility_id ?? null;
+}
+
+export async function fetchAvailabilitiesByFacilityId(user_id: string) {
   try {
+    const facility_id = await fetchFacilityIdByUserId(user_id);
+    console.log('faciility id:', facility_id);
     const { data, error } = await supabase
       .from('availabilities')
-      .select('*')
+      .select('*, available_dates(*)')
       .eq('facility_id', facility_id);
+
     if (error) {
       console.error('Error fetching availability by facility id:', error);
+      return null;
     }
-    //Check if data array is not empty
-    if (data && data.length == 0) {
-      console.log(
-        'No availabilities found for this facility_id or facility_id is undefined',
-      );
-      return null; // Return null if no matching data found
+
+    const now = new Date().toISOString();
+
+    // Only keep availabilities with at least one future end_date_time
+    const futureAvailabilities = (data ?? []).filter(availability =>
+      availability.available_dates?.some(
+        (date: typeof availability) => date.end_date_time > now,
+      ),
+    );
+
+    console.log('Filtered future availabilities:', futureAvailabilities);
+
+    if (futureAvailabilities.length === 0) {
+      console.log('No future availabilities for facility:', facility_id);
+      return null;
     }
-    console.log('Availability of facility', facility_id, ':', data);
+
+    return futureAvailabilities;
   } catch (error) {
-    console.error(`An unexpected error occurred:`, error);
-    return null; // Return null on unexpected error
+    console.error('An unexpected error occurred:', error);
+    return null;
   }
 }
 
