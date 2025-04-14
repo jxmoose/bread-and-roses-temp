@@ -17,6 +17,7 @@ import {
   Input,
   InputContainer,
   Label,
+  TextArea,
   Title,
 } from '@/app/onboarding/styles';
 import InputDropdown from '@/components/InputDropdown/InputDropdown';
@@ -55,17 +56,21 @@ export default function Onboarding() {
 
     const { location, setLocation } = facilityOnboardingContext;
 
-    if (!location.address) {
+    if (!location.address || !generalInfo.facilityName) {
       // Only fetch if address isn't set
       async function fetchLocation() {
         try {
-          const loc = await fetchCurrentUserFacility();
-          if (loc) {
+          const data = await fetchCurrentUserFacility();
+          if (data) {
             setLocation({
-              address: loc.street_address_1,
-              city: loc.city,
-              county: loc.county || '',
-              zipCode: loc.zip,
+              address: data.street_address_1,
+              city: data.city,
+              county: data.county || '',
+              zipCode: data.zip,
+            });
+            setGeneralInfo({
+              ...generalInfo,
+              ['facilityName']: data.name,
             });
           }
         } catch (error) {
@@ -89,7 +94,9 @@ export default function Onboarding() {
   const { facilityGeneralInfo: generalInfo, setGeneralInfo } =
     facilityOnboardingContext;
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+  ) => {
     const { name, value } = e.target;
     setGeneralInfo({
       ...generalInfo,
@@ -132,12 +139,7 @@ export default function Onboarding() {
             <Label>
               Name of Facility <RedAsterisk>*</RedAsterisk>
             </Label>
-            <Input
-              name="facilityName"
-              placeholder="Highland Hospital"
-              value={generalInfo.facilityName}
-              onChange={handleChange}
-            />
+            <GrayInput> {generalInfo.facilityName} </GrayInput>
           </InputContainer>
 
           <InputContainer>
@@ -156,7 +158,7 @@ export default function Onboarding() {
 
           <InputDropdown
             label="Type of Facility"
-            placeholder="Type to filter"
+            placeholder="Type to filter..."
             multi={false}
             onChange={handleFacilityChange}
             options={facilityTypeOptions}
@@ -166,7 +168,7 @@ export default function Onboarding() {
 
           <InputDropdown
             label="Audience"
-            placeholder="Type to filter"
+            placeholder="Type to filter..."
             multi
             onChange={handleAudienceChange}
             options={audienceTypeOptions}
@@ -178,11 +180,12 @@ export default function Onboarding() {
             <Label>
               Directions to Facility <RedAsterisk>*</RedAsterisk>
             </Label>
-            <Input
+            <TextArea
               name="directions"
               placeholder="e.g., Take 101 to Durant Ave..."
               value={generalInfo.directions}
               onChange={handleChange}
+              rows={4}
             />
           </InputContainer>
 
