@@ -103,7 +103,6 @@ export default function ActiveEventsPage() {
   const [hostFilters, setHostFilters] = useState(new Set<string>());
   const [volunteerPreferences, setVolunteerPreferences] =
     useState<VolunteerPreferences>();
-
   const getSearchEvents = async () => {
     setIsFiltering(true);
     const filtered: EventWithFacility[] =
@@ -185,7 +184,9 @@ export default function ActiveEventsPage() {
     setSearchInput('');
     setSearchActive(false);
     setFilteredEvents(events);
+    handleClearFilters();
   };
+
   const handleClearFilters = () => {
     setFacilityFilters(new Set());
     setCountyFilters(new Set());
@@ -202,7 +203,8 @@ export default function ActiveEventsPage() {
       !!(
         newFacilityFilters.size ||
         newCountyFilters.size ||
-        newHostFilters.size
+        newHostFilters.size ||
+        isFiltering
       ),
     );
     setIsFiltering(true);
