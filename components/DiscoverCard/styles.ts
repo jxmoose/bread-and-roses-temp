@@ -85,7 +85,7 @@ export const EventTag = styled.div`
   overflow: hidden;
 `;
 
-export const Subtitle = styled(P)`
+export const Subtitle = styled.div`
   display: flex;
   align-items: center;
   align-self: stretch;
