@@ -35,7 +35,9 @@ export async function fetchAvailabilitiesByFacilityId(user_id: string) {
     console.log(data);
     // Only keep availabilities with at least one future end_date_time
     const futureAvailabilities = (data ?? []).filter(availability =>
-      availability.available_dates?.some(date => date.end_date_time > now),
+      availability.available_dates?.some(
+        (date: { end_date_time: string }) => date.end_date_time > now,
+      ),
     );
 
     console.log(futureAvailabilities);
